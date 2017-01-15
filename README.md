@@ -4,6 +4,5 @@ Se recomienda escuchar el vídeo con auriculares, ya que el sonido no es muy bue
 poder grabar con un micrófono que no fuese el propio del laptop, pero por ciertos problemas que no he podido solucionar no he podido usar un
  micrófono externo.
 
-!!! EL VIDEO HA SIDO MOVIDO FUERA DEL REPOSITORIO PARA VERLO CONTACTAR CON 
-mcarmonaa
+!!! EL VIDEO se descarga del enlace puesto en el fichero link_video.txt
 

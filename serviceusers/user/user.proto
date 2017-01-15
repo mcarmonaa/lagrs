@@ -1,0 +1,91 @@
+syntax = "proto3";
+package user;
+option go_package = "user";
+
+// Interface exported by the server
+service Users {
+    rpc List (ListRequest) returns (ListReply);
+    rpc Add (AddRequest) returns (AddReply);
+    rpc Get (GetRequest) returns (GetReply);
+    rpc Update (UpdateRequest) returns (UpdateReply);
+    rpc Remove (RemoveRequest) returns (RemoveReply);
+}
+
+enum Role {
+    USER = 0; // 0 is the default value
+    ADMIN = 1;
+}
+
+enum Status {
+    OK = 0;
+    ERR = 1;
+}
+
+message User {
+    int32 id = 1;
+    string name = 2;
+    int32 age = 3;
+    string mail = 4;
+    Role role = 5;
+}
+
+// /users GET
+message ListRequest {
+    int32 users_per_page =  1; // users per page
+    int32 page = 2; // page's number required 
+}
+
+message ListReply {
+    Status status = 1; // 
+    int32 users_requested = 2; // number of users requested
+    int32 page_requested = 3;
+    string users_replied = 4;
+    string page_replied = 5;
+    string pages = 6; // number of pages with users_resquested per page
+    repeated User users = 7;
+}
+
+// /users POST
+// cambiar el contenido a un usuario
+message AddRequest {
+    string name = 1;
+    int32 age = 2;
+    string mail = 3;
+    Role role = 4;
+}
+
+message AddReply {
+    Status status = 1;
+    User user = 2;
+}
+
+
+// /users/id GET
+message GetRequest {
+    int32 id = 1;
+}
+
+message GetReply {
+    Status status = 1;
+    User user = 2;
+}
+
+// /users/id PUT
+message UpdateRequest {
+    User user = 1;
+}
+
+message UpdateReply {
+    Status status = 1;
+    User user = 2;
+}
+
+// /users/id DELETE
+message RemoveRequest {
+    int32 id = 1;
+}
+
+message RemoveReply {
+    Status status = 1;
+    User user = 2;
+}

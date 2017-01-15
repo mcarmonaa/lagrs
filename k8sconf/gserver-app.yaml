@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gserver
+  labels:
+    app: gserver
+    tier: frontend
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+  selector:
+    app: gserver
+    tier: frontend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gserver
+spec:
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: gserver
+        tier: frontend
+    spec:
+      containers:
+      - name: gserver
+        image: gserver:v0.1.0
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: SERVICES_DEFAULT_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: my-configmap
+                key: services.port
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+  namespace: default
+type: Opaque
+data:
+  dbconfig: cG9zdGdyZXM6Ly9tYW51ZWw6cGFzcy4xMjNAbGFncnMuYzV1eXV3dXFzbmtvLnVzLWVhc3QtMS5yZHMuYW1hem9uYXdzLmNvbTo1NDMyL2xhZ3JzP3NzbG1vZGU9ZGlzYWJsZQo=
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceusers
+  labels:
+    app: serviceusers
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+  selector:
+    app: serviceusers
+    tier: backend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: serviceusers
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: serviceusers
+        tier: backend
+    spec:
+      containers:
+      - name: serviceusers
+        image: serviceusers:v0.1.0
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: SERVICES_DEFAULT_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: my-configmap
+                key: services.port
+          - name: DB_URL
+            valueFrom:
+              secretKeyRef:
+                name: my-secret
+                key:  dbconfig
+          - name: TEST
+            value: "testing environment variables"
+        ports:
+        - containerPort: 8080
